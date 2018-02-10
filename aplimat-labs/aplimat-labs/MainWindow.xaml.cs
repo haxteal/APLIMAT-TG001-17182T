@@ -65,10 +65,14 @@ namespace aplimat_labs
             Console.WriteLine("Vector c values: x: " + d.x + " y: " + d.y + " z: " + d.z);
         }
 
-        private List<CubeMesh> myCubes = new List<CubeMesh>();
+        //private List<CubeMesh> myCubes = new List<CubeMesh>();
         //private CubeMesh myCube = new CubeMesh(2, 1, 0);
 
         int cnt = 0;
+
+
+        private CubeMesh myCube = new CubeMesh();
+        private Vector3 velocity = new Vector3(1, 1, 0);
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             cnt++;
@@ -77,34 +81,61 @@ namespace aplimat_labs
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.LoadIdentity();
             
-            gl.Translate(0.0f, 0.0f, -100.0f);
+            gl.Translate(0.0f, 0.0f, -40.0f);
 
 
-            //quiz============================================================
-            Console.WriteLine(cnt);
+            //quiz#01===========================================================
+            //Console.WriteLine(cnt);
 
-            CubeMesh myCube = new CubeMesh();
-            myCube.Position = new Vector3(Gaussian.Generate(0, 15), yPos.GenerateInt(), 0);
-            myCubes.Add(myCube);
-            
-            foreach (var cube in myCubes)
+            //CubeMesh myCube = new CubeMesh();
+            //myCube.Position = new Vector3(Gaussian.Generate(0, 15), yPos.GenerateInt(), 0);
+            //myCubes.Add(myCube);
+
+            //foreach (var cube in myCubes)
+            //{
+            //    gl.Color((float)colorOn.GenerateInt(), (float)colorOn.GenerateInt(), (float)colorOn.GenerateInt());
+            //    cube.Draw(gl);
+            //}
+
+            ////clear on frame 100
+            //if (cnt == 100)
+            //{
+            //    cnt = 0;
+            //    myCubes.Clear();
+            //}
+
+
+
+            //quiz#01End===========================================================
+
+
+            //Feb10================================================================
+            //Seatwork #2==========================================================
+            myCube.Draw(gl);
+            myCube.Position += velocity;
+
+            if (myCube.Position.x >= 25.0f)
             {
-                gl.Color((float)colorOn.GenerateInt(), (float)colorOn.GenerateInt(), (float)colorOn.GenerateInt());
-                cube.Draw(gl);
+                velocity.x = -1;
             }
 
-            //clear on frame 100
-            if (cnt == 100)
+            if (myCube.Position.y >= 15.0f)
             {
-                cnt = 0;
-                myCubes.Clear();
+                velocity.y = -1;
+            }
+
+            if (myCube.Position.x <= -25.0f)
+            {
+                velocity.x = 1;
+            }
+
+            if (myCube.Position.y <= -15.0f)
+            {
+                velocity.y = 1;
             }
 
 
-            
-            //quiz===========================================================
-
-
+            //Feb10================================================================
 
 
 
@@ -154,7 +185,7 @@ namespace aplimat_labs
             //DrawQuadraticFunction(gl);
             //DrawCircle(gl);
         }
-        
+
 
         private void DrawCartesianPlane(OpenGL gl)
         {
