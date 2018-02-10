@@ -27,8 +27,8 @@ namespace aplimat_labs
         private const float GRAPH_LIMIT = 15;
         private const int TOTAL_CIRCLE_ANGLE = 360;
 
-        private Vector3 a = new Vector3(15, 15, 0);
-        private Vector3 b = new Vector3(-2, 10, 0); //0 z, y, z
+        //private Vector3 a = new Vector3(15, 15, 0);
+        //private Vector3 b = new Vector3(-2, 10, 0); //0 z, y, z
 
         private const int HEADS = 0;
         private const int TAILS = 1;
@@ -58,11 +58,13 @@ namespace aplimat_labs
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
 
-            Vector3 c = a + b;
-            Console.WriteLine("Vector c values: x: " + c.x + " y: " + c.y + " z: " + c.z);
+            //Vector3 c = a + b;
+            //Console.WriteLine("Vector c values: x: " + c.x + " y: " + c.y + " z: " + c.z);
 
-            Vector3 d = a - b;
-            Console.WriteLine("Vector c values: x: " + d.x + " y: " + d.y + " z: " + d.z);
+            //Vector3 d = a - b;
+            //Console.WriteLine("Vector c values: x: " + d.x + " y: " + d.y + " z: " + d.z);
+
+            
         }
 
         //private List<CubeMesh> myCubes = new List<CubeMesh>();
@@ -73,6 +75,18 @@ namespace aplimat_labs
 
         private CubeMesh myCube = new CubeMesh();
         private Vector3 velocity = new Vector3(1, 1, 0);
+        private float speed = 2.0f;
+
+        private Vector3 myVector = new Vector3();
+        private Vector3 a = new Vector3(3, 5, 0);
+        private Vector3 b = new Vector3(-7, -6, 0);
+
+
+        private Vector3 origin = new Vector3(0, 0, 0);
+        private Vector3 tip = new Vector3(5, 7, 0);
+        private Vector3 magnitude = new Vector3();
+
+
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
             cnt++;
@@ -111,33 +125,80 @@ namespace aplimat_labs
 
             //Feb10================================================================
             //Seatwork #2==========================================================
-            myCube.Draw(gl);
-            myCube.Position += velocity;
+            //myCube.Draw(gl);
+            //myCube.Position += velocity * speed;
 
-            if (myCube.Position.x >= 25.0f)
-            {
-                velocity.x = -1;
-            }
+            //if (myCube.Position.x >= 25.0f)
+            //{
+            //    velocity.x = -1;
+            //}
 
-            if (myCube.Position.y >= 15.0f)
-            {
-                velocity.y = -1;
-            }
+            //if (myCube.Position.y >= 15.0f)
+            //{
+            //    velocity.y = -1;
+            //}
 
-            if (myCube.Position.x <= -25.0f)
-            {
-                velocity.x = 1;
-            }
+            //if (myCube.Position.x <= -25.0f)
+            //{
+            //    velocity.x = 1;
+            //}
 
-            if (myCube.Position.y <= -15.0f)
-            {
-                velocity.y = 1;
-            }
+            //if (myCube.Position.y <= -15.0f)
+            //{
+            //    velocity.y = 1;
+            //}
+            //SW#2 End ===========================================================
+
+            //myVector = a - b;
+            ////vector a
+            //gl.Color(1.0f, 0.0f, 0.0f);
+            //gl.Begin(OpenGL.GL_LINE_STRIP);
+            //gl.Vertex(0, 0);
+            //gl.Vertex(a.x, a.y);
+            //gl.End();
+
+            ////vector b
+            //gl.Color(0.0f, 1.0f, 0.0f);
+            //gl.Begin(OpenGL.GL_LINE_STRIP);
+            //gl.Vertex(a.x, a.y);
+            //gl.Vertex(b.x, b.y);
+            //gl.End();
+            
+            //gl.Color(0.0f, 0.0f, 1.0f);
+            //gl.Begin(OpenGL.GL_LINE_STRIP);
+
+            //gl.Vertex(b.x, b.y);
+            //gl.Vertex(0, 0);
+            //gl.End();
 
 
+            //Seatwork #3 =========================================================
+
+            gl.LineWidth(1.0f);
+            gl.Color(0.0f, 1.0f, 0.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(origin.x, origin.y);
+            gl.Vertex(tip.x, tip.y);
+            gl.End();
+
+            gl.LineWidth(5.0f);
+            gl.Color(0.0f, 0.0f, 1.0f);
+            gl.Begin(OpenGL.GL_LINE_STRIP);
+            gl.Vertex(origin.x, origin.y);
+            gl.Vertex(tip.x, tip.y);
+            gl.End();
+
+
+            magnitude = tip - origin;
+            //Console.WriteLine(magnitude.GetMagnitude());
+
+            gl.DrawText(10, 10, 1.0f, 1.0f, 1.0f, "Arial", 15.0f, "Lenght: " + magnitude.GetMagnitude());
             //Feb10================================================================
 
-
+            if(true)
+            {
+                Console.WriteLine("alkfjhshfsjkdfhjk");
+            }
 
 
 
@@ -185,6 +246,7 @@ namespace aplimat_labs
             //DrawQuadraticFunction(gl);
             //DrawCircle(gl);
         }
+
 
 
         private void DrawCartesianPlane(OpenGL gl)
@@ -330,6 +392,8 @@ namespace aplimat_labs
 
             gl.ShadeModel(OpenGL.GL_SMOOTH);
             
+
+
         }
         #endregion
 
@@ -339,5 +403,9 @@ namespace aplimat_labs
             gl.DrawText(x, y, 1, 1, 1, "Arial", 12, text);
         }
         #endregion
+        
+
+
+
     }
 }

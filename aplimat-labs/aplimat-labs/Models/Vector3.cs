@@ -45,5 +45,24 @@ namespace aplimat_labs.Models
                                left.y - right.y,
                                left.z - right.z);
         }
+
+        public static Vector3 operator *(Vector3 left, float scalar)
+        {
+            return new Vector3(left.x * scalar,
+                               left.y * scalar,
+                               left.z * scalar);
+        }
+
+        public static Vector3 operator /(Vector3 left, float scalar)
+        {
+            return new Vector3(left.x / scalar,
+                               left.y / scalar,
+                               left.z / scalar);
+        }
+
+        public float GetMagnitude()
+        {
+            return (float)Math.Sqrt((x * x) + (y * y) + (z * z));
+        }
     }
 }
