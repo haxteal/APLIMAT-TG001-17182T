@@ -72,24 +72,27 @@ namespace aplimat_labs
 
         int cnt = 0;
 
+        private Vector3 mousePos = new Vector3(0, 0, 0);
 
-        private CubeMesh myCube = new CubeMesh();
-        private Vector3 velocity = new Vector3(1, 1, 0);
-        private float speed = 2.0f;
+        //private CubeMesh myCube = new CubeMesh();
+        //private Vector3 velocity = new Vector3(1, 1, 0);
+        //private float speed = 2.0f;
 
-        private Vector3 myVector = new Vector3();
-        private Vector3 a = new Vector3(3, 5, 0);
-        private Vector3 b = new Vector3(-7, -6, 0);
+        //private Vector3 myVector = new Vector3();
+        //private Vector3 a = new Vector3(3, 5, 0);
+        //private Vector3 b = new Vector3(-7, -6, 0);
 
 
-        private Vector3 origin = new Vector3(0, 0, 0);
-        private Vector3 tip = new Vector3(5, 7, 0);
-        private Vector3 magnitude = new Vector3();
+        //private Vector3 origin = new Vector3(0, 0, 0);
+        //private Vector3 tip = new Vector3(5, 7, 0);
+        //private Vector3 magnitude = new Vector3();
 
+        private CubeMesh mover = new CubeMesh(-25, 0, 0);
+        private Vector3 acceleration = new Vector3(0.01f, 0, 0);
 
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
-            cnt++;
+            
 
             OpenGL gl = args.OpenGL;
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -97,154 +100,250 @@ namespace aplimat_labs
             
             gl.Translate(0.0f, 0.0f, -40.0f);
 
+            mover.Draw(gl);
+            mover.Velocity.Clamp(2.0f);
+            mover.Velocity.ClampMin(-2.0f);
 
-            //quiz#01===========================================================
-            //Console.WriteLine(cnt);
-
-            //CubeMesh myCube = new CubeMesh();
-            //myCube.Position = new Vector3(Gaussian.Generate(0, 15), yPos.GenerateInt(), 0);
-            //myCubes.Add(myCube);
-
-            //foreach (var cube in myCubes)
-            //{
-            //    gl.Color((float)colorOn.GenerateInt(), (float)colorOn.GenerateInt(), (float)colorOn.GenerateInt());
-            //    cube.Draw(gl);
-            //}
-
-            ////clear on frame 100
-            //if (cnt == 100)
-            //{
-            //    cnt = 0;
-            //    myCubes.Clear();
-            //}
-
-
-
-            //quiz#01End===========================================================
-
-
-            //Feb10================================================================
-            //Seatwork #2==========================================================
-            //myCube.Draw(gl);
-            //myCube.Position += velocity * speed;
-
-            //if (myCube.Position.x >= 25.0f)
-            //{
-            //    velocity.x = -1;
-            //}
-
-            //if (myCube.Position.y >= 15.0f)
-            //{
-            //    velocity.y = -1;
-            //}
-
-            //if (myCube.Position.x <= -25.0f)
-            //{
-            //    velocity.x = 1;
-            //}
-
-            //if (myCube.Position.y <= -15.0f)
-            //{
-            //    velocity.y = 1;
-            //}
-            //SW#2 End ===========================================================
-
-            //myVector = a - b;
-            ////vector a
-            //gl.Color(1.0f, 0.0f, 0.0f);
-            //gl.Begin(OpenGL.GL_LINE_STRIP);
-            //gl.Vertex(0, 0);
-            //gl.Vertex(a.x, a.y);
-            //gl.End();
-
-            ////vector b
-            //gl.Color(0.0f, 1.0f, 0.0f);
-            //gl.Begin(OpenGL.GL_LINE_STRIP);
-            //gl.Vertex(a.x, a.y);
-            //gl.Vertex(b.x, b.y);
-            //gl.End();
-            
-            //gl.Color(0.0f, 0.0f, 1.0f);
-            //gl.Begin(OpenGL.GL_LINE_STRIP);
-
-            //gl.Vertex(b.x, b.y);
-            //gl.Vertex(0, 0);
-            //gl.End();
-
-
-            //Seatwork #3 =========================================================
-
-            gl.LineWidth(1.0f);
-            gl.Color(0.0f, 1.0f, 0.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(origin.x, origin.y);
-            gl.Vertex(tip.x, tip.y);
-            gl.End();
-
-            gl.LineWidth(5.0f);
-            gl.Color(0.0f, 0.0f, 1.0f);
-            gl.Begin(OpenGL.GL_LINE_STRIP);
-            gl.Vertex(origin.x, origin.y);
-            gl.Vertex(tip.x, tip.y);
-            gl.End();
-
-
-            magnitude = tip - origin;
-            //Console.WriteLine(magnitude.GetMagnitude());
-
-            gl.DrawText(10, 10, 1.0f, 1.0f, 1.0f, "Arial", 15.0f, "Lenght: " + magnitude.GetMagnitude());
-            //Feb10================================================================
-
-            if(true)
+            if (cnt == 0)
             {
-                Console.WriteLine("alkfjhshfsjkdfhjk");
+                mover.Velocity += acceleration;
+            }
+            if (cnt == 1)
+            {
+                mover.Velocity -= acceleration;
             }
 
+            if (mover.Position.x >= 25.0f)
+            {
+                cnt = 1;
+                //mover.Position.x = -25.0f;
+                mover.Velocity.x = -mover.Velocity.x;
+                acceleration.x = 0.05f;
+            }
+
+            if (mover.Velocity.x <= -2.0f)
+            {
+                mover.Velocity.x = 0.0f;
+                acceleration.x = -0.0f;
+            }
+            
 
 
 
-            //myCube.Draw(gl);
-
-
-            //myCube.Position += new Vector3(0, 1, 0);
-
-            //switch(rngDirection.GenerateInt())
-            //{
-            //    case UP:
-            //        myCube.Position += new Vector3(0, 0.1f, 0);
-            //        break;
-            //    case DOWN:
-            //        myCube.Position += new Vector3(0, -0.1f, 0);
-            //        break;
-            //    case LEFT:
-            //        myCube.Position += new Vector3(-0.1f, 0, 0);
-            //        break;
-            //    case RIGHT:
-            //        myCube.Position += new Vector3(0.1f, 0, 0);
-            //        break;
-            //    case UP_LEFT:
-            //        myCube.Position += new Vector3(-0.1f, 0.1f, 0);
-            //        break;
-            //    case UP_RIGHT:
-            //        myCube.Position += new Vector3(0.1f, 0.1f, 0);
-            //        break;
-            //    case DOWN_LEFT:
-            //        myCube.Position += new Vector3(-0.1f, -0.1f, 0);
-            //        break;
-            //    case DOWN_RIGHT:
-            //        myCube.Position += new Vector3(0.1f, -0.1f, 0);
-            //        break;
-            //}
+            gl.DrawText(20, 20, 1, 0, 0, "Arial", 25, mover.Velocity.x + " ");
 
 
 
 
-            ////gl.Color(0, 1, 0);
-            //DrawCartesianPlane(gl); //draw cartesian plane with unit lines
-            //DrawPoint(gl, 1, 1); //draw a point with coordinates (1, 1)
-            //DrawLinearFunction(gl);
-            //DrawQuadraticFunction(gl);
-            //DrawCircle(gl);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //mousePos.Normalize();
+            //mousePos *= 10;
+
+                //gl.LineWidth(30.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Color(1.0f, 0.0f, 0.0f);
+                //gl.Vertex(0, 0, 0);
+                //gl.Vertex(mousePos.x, mousePos.y, 0);
+                //gl.End();
+
+                //gl.LineWidth(3.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Color(1.0f, 1.0f, 1.0f);
+                //gl.Vertex(0, 0, 0);
+                //gl.Vertex(mousePos.x, mousePos.y, 0);
+                //gl.End();
+
+                //gl.LineWidth(30.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Color(1.0f, 0.0f, 0.0f);
+                ////if (cnt <= 10)
+                ////{
+                ////    gl.Vertex(10, 0, 0);
+                ////}
+                ////if (cnt > 10)
+                ////{
+                ////    gl.Vertex(-10, 0, 0);
+                ////}
+                ////if (cnt == 20)
+                ////    cnt = 0;
+                //gl.Vertex(10, 0, 0);
+                //gl.Vertex(mousePos.x, mousePos.y, 0);
+                //gl.End();
+
+                //gl.LineWidth(30.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Color(1.0f, 0.0f, 0.0f);
+                //gl.Vertex(-10, 0, 0);
+                //gl.Vertex(mousePos.x, mousePos.y, 0);
+                //gl.End();
+
+                //gl.LineWidth(30.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Color(1.0f, 0.0f, 0.0f);
+                //gl.Vertex(0, 10, 0);
+                //gl.Vertex(mousePos.x, mousePos.y, 0);
+                //gl.End();
+
+
+
+
+                //quiz#01===========================================================
+                //Console.WriteLine(cnt);
+
+                //CubeMesh myCube = new CubeMesh();
+                //myCube.Position = new Vector3(Gaussian.Generate(0, 15), yPos.GenerateInt(), 0);
+                //myCubes.Add(myCube);
+
+                //foreach (var cube in myCubes)
+                //{
+                //    gl.Color((float)colorOn.GenerateInt(), (float)colorOn.GenerateInt(), (float)colorOn.GenerateInt());
+                //    cube.Draw(gl);
+                //}
+
+                ////clear on frame 100
+                //if (cnt == 100)
+                //{
+                //    cnt = 0;
+                //    myCubes.Clear();
+                //}
+
+
+
+                //quiz#01End===========================================================
+
+
+                //Feb10================================================================
+                //Seatwork #2==========================================================
+                //myCube.Draw(gl);
+                //myCube.Position += velocity * speed;
+
+                //if (myCube.Position.x >= 25.0f)
+                //{
+                //    velocity.x = -1;
+                //}
+
+                //if (myCube.Position.y >= 15.0f)
+                //{
+                //    velocity.y = -1;
+                //}
+
+                //if (myCube.Position.x <= -25.0f)
+                //{
+                //    velocity.x = 1;
+                //}
+
+                //if (myCube.Position.y <= -15.0f)
+                //{
+                //    velocity.y = 1;
+                //}
+                //SW#2 End ===========================================================
+
+                //myVector = a - b;
+                ////vector a
+                //gl.Color(1.0f, 0.0f, 0.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Vertex(0, 0);
+                //gl.Vertex(a.x, a.y);
+                //gl.End();
+
+                ////vector b
+                //gl.Color(0.0f, 1.0f, 0.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Vertex(a.x, a.y);
+                //gl.Vertex(b.x, b.y);
+                //gl.End();
+
+                //gl.Color(0.0f, 0.0f, 1.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+
+                //gl.Vertex(b.x, b.y);
+                //gl.Vertex(0, 0);
+                //gl.End();
+
+
+                //Seatwork #3 =========================================================
+
+                //gl.LineWidth(1.0f);
+                //gl.Color(0.0f, 1.0f, 0.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Vertex(origin.x, origin.y);
+                //gl.Vertex(tip.x, tip.y);
+                //gl.End();
+
+                //gl.LineWidth(5.0f);
+                //gl.Color(0.0f, 0.0f, 1.0f);
+                //gl.Begin(OpenGL.GL_LINE_STRIP);
+                //gl.Vertex(origin.x, origin.y);
+                //gl.Vertex(tip.x, tip.y);
+                //gl.End();
+
+
+                //magnitude = tip - origin;
+                //Console.WriteLine(magnitude.GetMagnitude());
+
+                //gl.DrawText(10, 10, 1.0f, 1.0f, 1.0f, "Arial", 15.0f, "Lenght: " + magnitude.GetMagnitude());
+                //Feb10================================================================
+
+
+
+
+
+
+                //myCube.Draw(gl);
+
+
+                //myCube.Position += new Vector3(0, 1, 0);
+
+                //switch(rngDirection.GenerateInt())
+                //{
+                //    case UP:
+                //        myCube.Position += new Vector3(0, 0.1f, 0);
+                //        break;
+                //    case DOWN:
+                //        myCube.Position += new Vector3(0, -0.1f, 0);
+                //        break;
+                //    case LEFT:
+                //        myCube.Position += new Vector3(-0.1f, 0, 0);
+                //        break;
+                //    case RIGHT:
+                //        myCube.Position += new Vector3(0.1f, 0, 0);
+                //        break;
+                //    case UP_LEFT:
+                //        myCube.Position += new Vector3(-0.1f, 0.1f, 0);
+                //        break;
+                //    case UP_RIGHT:
+                //        myCube.Position += new Vector3(0.1f, 0.1f, 0);
+                //        break;
+                //    case DOWN_LEFT:
+                //        myCube.Position += new Vector3(-0.1f, -0.1f, 0);
+                //        break;
+                //    case DOWN_RIGHT:
+                //        myCube.Position += new Vector3(0.1f, -0.1f, 0);
+                //        break;
+                //}
+
+
+
+
+                ////gl.Color(0, 1, 0);
+                //DrawCartesianPlane(gl); //draw cartesian plane with unit lines
+                //DrawPoint(gl, 1, 1); //draw a point with coordinates (1, 1)
+                //DrawLinearFunction(gl);
+                //DrawQuadraticFunction(gl);
+                //DrawCircle(gl);
         }
 
 
@@ -402,10 +501,20 @@ namespace aplimat_labs
         {
             gl.DrawText(x, y, 1, 1, 1, "Arial", 12, text);
         }
+
+
+
         #endregion
-        
 
+        private void OpenGLControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            var pos = e.GetPosition(this);
+            mousePos.x = (float)pos.X - (float)Width / 2.0f;
+            mousePos.y = (float)pos.Y - (float)Height / 2.0f;
 
+            mousePos.y = -mousePos.y;
 
+            Console.WriteLine("mouse x:" + mousePos.x + " y:" + mousePos.y);
+        }
     }
 }
