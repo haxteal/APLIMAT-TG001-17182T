@@ -62,13 +62,15 @@ namespace aplimat_labs.Models
             gl.Vertex(this.Position.x + 0.5f, this.Position.y - 0.5f, this.Position.z - 0.5f);
             gl.End();
 
-            ApplyVelocity();
+            UpdateMotion();
 
         }
 
-        private void ApplyVelocity()
+        private void UpdateMotion()
         {
-            this.Position += Velocity;
+            this.Velocity += this.Acceleration;
+            this.Position += this.Velocity;
+            this.Acceleration *= 0;
         }
     }
 }
